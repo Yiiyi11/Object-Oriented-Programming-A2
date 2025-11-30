@@ -139,7 +139,18 @@ public class Ride implements RideInterface {
             index++;
         }
     }
-
+    // ------------------------------
+    // Part 4B: Sort ride history using VisitorComparator
+    // ------------------------------
+    public void sortRideHistory() {
+        if (rideHistory.isEmpty()) {
+            System.out.println(rideName + " ride history is empty - no need to sort");
+            return;
+        }
+        // Use VisitorComparator to sort the LinkedList (age ascending → fast pass descending)
+        Collections.sort(rideHistory, new VisitorComparator());
+        System.out.println(rideName + " ride history sorted successfully");
+    }
     @Override
     public void runOneCycle() {
         // Part5: Implement one operation cycle of the ride

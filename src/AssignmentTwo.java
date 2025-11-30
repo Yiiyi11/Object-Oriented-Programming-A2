@@ -71,7 +71,37 @@ public class AssignmentTwo {
         // 6. Print the full history
         thunderstorm.printRideHistory();
     }
-    public void partFourB() {}
+
+    public void partFourB() {
+        System.out.println("\n=== Part 4B: 历史记录排序测试 ===");
+        // 1. Create a Ride object
+        Ride ferrisWheel = new Ride("摩天轮", "Family Ride", new Employee("王五", 35, "13800138002", "EMP003", "摩天轮操作员"), 6);
+
+        // 2. Create 5 visitors (age and fast pass random)
+        Visitor v1 = new Visitor("Alice", 25, "13900139011", "VIS011", false);
+        Visitor v2 = new Visitor("Bob", 22, "13900139012", "VIS012", true);
+        Visitor v3 = new Visitor("Charlie", 25, "13900139013", "VIS013", true);
+        Visitor v4 = new Visitor("Diana", 30, "13900139014", "VIS014", false);
+        Visitor v5 = new Visitor("Ethan", 22, "13900139015", "VIS015", false);
+
+        // 3. Add to history
+        ferrisWheel.addVisitorToHistory(v1);
+        ferrisWheel.addVisitorToHistory(v2);
+        ferrisWheel.addVisitorToHistory(v3);
+        ferrisWheel.addVisitorToHistory(v4);
+        ferrisWheel.addVisitorToHistory(v5);
+
+        // 4. Print before sorting
+        System.out.println("\n排序前：");
+        ferrisWheel.printRideHistory();
+
+        // 5. Sorting
+        ferrisWheel.sortRideHistory();
+
+        // 6. Print after sorting
+        System.out.println("\n排序后（年龄升序，同年龄有快速通行证在前）：");
+        ferrisWheel.printRideHistory();
+    }
     public void partFive() {}
     public void partSix() {}
     public void partSeven() {}
