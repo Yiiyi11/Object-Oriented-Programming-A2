@@ -5,6 +5,8 @@ import java.util.Collections;
 // Add IO imports for CSV export (critical)
 import java.io.BufferedWriter;
 import java.io.FileWriter;
+import java.io.BufferedReader;
+import java.io.FileReader;
 import java.io.IOException;
 
 public class Ride implements RideInterface {
@@ -200,10 +202,7 @@ public class Ride implements RideInterface {
     // ------------------------------
     // Extended Feature: Export ride history to CSV (ADD HERE)
     // ------------------------------
-    /**
-     * Exports ride history records to a CSV file with error handling
-     * @param filePath Path to the output CSV file (e.g., "carousel_history.csv")
-     */
+
     public void exportRideHistory(String filePath) {
         System.out.println("\n=== Exporting " + rideName + " ride history to file ===");
         // Try-with-resources: Auto-close BufferedWriter to avoid resource leaks
@@ -223,6 +222,53 @@ public class Ride implements RideInterface {
             System.out.println("Successfully exported " + rideHistory.size() + " records to " + filePath);
         } catch (IOException e) {
             System.out.println("Error: Failed to export file - " + e.getMessage());
+        }
+    }
+
+    public void importRideHistory(String filePath) {
+        System.out.println("\n=== Importing ride history to " + rideName + " from file ===");
+        // Clear existing history (optional: remove this line to append instead of overwrite)
+        rideHistory.clear();
+
+        // Try-with-resources: Auto-close BufferedReader to avoid resource leaks
+        try (BufferedReader reader = new BufferedReader(new FileReader(filePath))) {
+            String line;
+            int importedCount = 0;
+            // Read CSV file line by line
+            while ((line = reader.readLine()) != null) {
+                line = line.trim();
+                if (line.isEmpty()) {
+                    continue; // Skip empty lines
+                }
+                // Split CSV line into fields (format: VisitorID,Name,Age,ContactNumber,HasFastPass)
+                String[] fields = line.split(",");
+                // Validate field count (must have exactly 5 fields)
+                if (fields.length != 5) {
+                    System.out.println("Warning: Skipping invalid line - " + line);
+                    continue;
+                }
+                // Parse fields with type conversion validation
+                String visitorId = fields[0];
+                String name = fields[1];
+                int age;
+                boolean hasFastPass;
+                try {
+                    age = Integer.parseInt(fields[2]); // Parse age (integer)
+                    hasFastPass = Boolean.parseBoolean(fields[4]); // Parse fast pass status (boolean)
+                } catch (NumberFormatException e) {
+                    System.out.println("Warning: Skipping line with format error - " + line + " (" + e.getMessage() + ")");
+                    continue;
+                }
+                String contactNumber = fields[3];
+
+                // Create Visitor object and add to ride history
+                Visitor visitor = new Visitor(name, age, contactNumber, visitorId, hasFastPass);
+                rideHistory.add(visitor);
+                importedCount++;
+            }
+            System.out.println("Successfully imported " + importedCount + " records");
+        } catch (IOException e) {
+            System.out.println("Error: Failed to import file - " + e.getMessage());
         }
     }
 }
