@@ -1,22 +1,23 @@
 import java.util.Queue;
 import java.util.LinkedList;
+import java.util.Iterator;
 
 public class Ride implements RideInterface {
     // Instance variables (Name, Type, Maximum Riders, Operator)
     private String rideName;
     private String rideType; // e.g., "Roller Coaster", "Water Ride"
-    private Employee operator; // Must be of Employee type to identify if there is an operator
+    private Employee operator; // Must be of Employee type to identify the assigned operator
     private int maxRider;
     private int numOfCycles;
 
-    private Queue<Visitor> waitingLine; // Waiting queue
+    private Queue<Visitor> waitingLine; // Waiting queue (FIFO)
     private LinkedList<Visitor> rideHistory; // Ride history records
 
     // Default constructor
     public Ride() {
-        this.waitingLine = new LinkedList<>(); // Initialize queue
+        this.waitingLine = new LinkedList<>(); // Initialize waiting queue
         this.rideHistory = new LinkedList<>(); // Initialize ride history
-        this.numOfCycles = 0; // Default number of cycles is 0
+        this.numOfCycles = 0; // Default number of operation cycles is 0
     }
 
     // Parameterized constructor
@@ -52,6 +53,9 @@ public class Ride implements RideInterface {
                 '}';
     }
 
+    // ------------------------------
+    // Queue-related method implementations (Part 3)
+    // ------------------------------
     @Override
     public void addVisitorToQueue(Visitor visitor) {
         if (visitor != null) {
@@ -86,30 +90,58 @@ public class Ride implements RideInterface {
         }
     }
 
+    // ------------------------------
+    // Ride history-related method implementations (Part 4A)
+    // ------------------------------
     @Override
     public void addVisitorToHistory(Visitor visitor) {
-        // Part4: Add visitor to ride history
+        if (visitor != null) {
+            rideHistory.add(visitor);
+            System.out.println("Successfully added visitor " + visitor.getVisitorId() + " to " + rideName + " ride history");
+        } else {
+            System.out.println("Error: Visitor object is null, cannot add to ride history");
+        }
     }
 
     @Override
     public boolean checkVisitorFromHistory(Visitor visitor) {
-        // Part4: Check if visitor exists in ride history
+        if (visitor == null) {
+            System.out.println("Error: Visitor object is null, cannot perform check");
+            return false;
+        }
+        // Use Iterator to traverse (REQUIRED - no marks if not used)
+        Iterator<Visitor> iterator = rideHistory.iterator();
+        while (iterator.hasNext()) {
+            Visitor v = iterator.next();
+            if (v.getVisitorId().equals(visitor.getVisitorId())) { // Check by visitor ID
+                return true;
+            }
+        }
         return false;
     }
 
     @Override
     public int numberOfVisitors() {
-        // Part4: Return number of visitors in history
-        return 0;
+        return rideHistory.size(); // Return total number of visitors in history
     }
 
     @Override
     public void printRideHistory() {
-        // Part4: Print ride history
+        if (rideHistory.isEmpty()) {
+            System.out.println(rideName + " has no ride history yet");
+            return;
+        }
+        System.out.println("\n" + rideName + " Ride History (Total: " + rideHistory.size() + " people):");
+        Iterator<Visitor> iterator = rideHistory.iterator();
+        int index = 1;
+        while (iterator.hasNext()) {
+            System.out.println(index + ". " + iterator.next());
+            index++;
+        }
     }
 
     @Override
     public void runOneCycle() {
-        // Part5: Run one cycle of the ride
+        // Part5: Implement one operation cycle of the ride
     }
 }

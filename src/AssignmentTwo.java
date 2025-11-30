@@ -41,7 +41,36 @@ public class AssignmentTwo {
         System.out.println("\n移除1个访客后：");
         rollerCoaster.printQueue();
     }
-    public void partFourA() {}
+
+    public void partFourA() {
+        System.out.println("\n=== Part 4A: 乘坐历史测试 ===");
+        // 1. Create a Ride object
+        Ride thunderstorm = new Ride("雷暴", "Water Ride", new Employee("李四", 28, "13800138001", "EMP002", "水上项目操作员"), 4);
+
+        // 2. Create 5 visitors
+        Visitor v1 = new Visitor("Tom", 24, "13900139006", "VIS006", false);
+        Visitor v2 = new Visitor("Sherly", 26, "13900139007", "VIS007", true);
+        Visitor v3 = new Visitor("Ben", 32, "13900139008", "VIS008", false);
+        Visitor v4 = new Visitor("David", 21, "13900139009", "VIS009", true);
+        Visitor v5 = new Visitor("Emma", 29, "13900139010", "VIS010", false);
+
+        // 3. Add to history
+        thunderstorm.addVisitorToHistory(v1);
+        thunderstorm.addVisitorToHistory(v2);
+        thunderstorm.addVisitorToHistory(v3);
+        thunderstorm.addVisitorToHistory(v4);
+        thunderstorm.addVisitorToHistory(v5);
+
+        // 4. Check if a visitor is in history
+        Visitor checkV = new Visitor("Sherly", 26, "13900139007", "VIS007", true);
+        System.out.println("\n访客 " + checkV.getVisitorId() + " 是否乘坐过？" + thunderstorm.checkVisitorFromHistory(checkV));
+
+        // 5. Number of print history
+        System.out.println("乘坐历史总人数：" + thunderstorm.numberOfVisitors());
+
+        // 6. Print the full history
+        thunderstorm.printRideHistory();
+    }
     public void partFourB() {}
     public void partFive() {}
     public void partSix() {}
