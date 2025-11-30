@@ -1,4 +1,4 @@
-public abstract class Person {
+public abstract class Person { //abstract 关键字，将普通类转为抽象类
     // 实例变量（姓名、年龄、联系电话）
     private String name;
     private int age;

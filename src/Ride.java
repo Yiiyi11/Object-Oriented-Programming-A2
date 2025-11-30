@@ -1,4 +1,7 @@
-public class Ride implements RideInterface { // 后续Part 2实现接口，提前声明
+import java.util.Queue;
+import java.util.LinkedList;
+
+public class Ride implements RideInterface {
     // 实例变量（名称、类型、最大载客量、操作员）
     private String rideName;
     private String rideType; // 如"Roller Coaster"、"Water Ride"
@@ -36,6 +39,54 @@ public class Ride implements RideInterface { // 后续Part 2实现接口，提�
 
     @Override
     public String toString() {
-        return "Ride{rideName='" + rideName + "', rideType='" + rideType + "', operator=" + operator + ", maxRider=" + maxRider + "}";
+        return "Ride{" +
+                "rideName='" + rideName + '\'' +
+                ", rideType='" + rideType + '\'' +
+                ", operator=" + operator +
+                ", maxRider=" + maxRider +
+                ", numOfCycles=" + numOfCycles +
+                '}';
+    }
+
+    @Override
+    public void addVisitorToQueue(Visitor visitor) {
+        // Part3补充：添加访客到等待队列
+    }
+
+    @Override
+    public void removeVisitorFromQueue() {
+        // Part3补充：从队列移除访客
+    }
+
+    @Override
+    public void printQueue() {
+        // Part3补充：打印等待队列
+    }
+
+    @Override
+    public void addVisitorToHistory(Visitor visitor) {
+        // Part4补充：添加访客到乘坐历史
+    }
+
+    @Override
+    public boolean checkVisitorFromHistory(Visitor visitor) {
+        // Part4补充：检查访客是否在历史中
+        return false;
+    }
+
+    @Override
+    public int numberOfVisitors() {
+        // Part4补充：返回历史记录中的访客数
+        return 0;
+    }
+
+    @Override
+    public void printRideHistory() {
+        // Part4补充：打印乘坐历史
+    }
+
+    @Override
+    public void runOneCycle() {
+        // Part5补充：运行一次游乐设施周期
     }
 }
