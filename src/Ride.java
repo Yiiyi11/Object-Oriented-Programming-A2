@@ -153,6 +153,31 @@ public class Ride implements RideInterface {
     }
     @Override
     public void runOneCycle() {
-        // Part5: Implement one operation cycle of the ride
+        System.out.println("\n=== Starting one operation cycle for " + rideName + " ===");
+        // Check condition 1: Whether an operator is assigned
+        if (operator == null) {
+            System.out.println("Error: No operator assigned to " + rideName + ", cannot start operation");
+            return;
+        }
+        // Check condition 2: Whether the waiting queue is empty
+        if (waitingLine.isEmpty()) {
+            System.out.println("Error: " + rideName + " waiting queue is empty, cannot start operation");
+            return;
+        }
+
+        // Calculate number of riders for this cycle (based on max capacity and queue size)
+        int ridersThisCycle = Math.min(maxRider, waitingLine.size());
+        System.out.println("Number of riders for this cycle: " + ridersThisCycle);
+
+        // Remove visitors from queue, add to ride history
+        for (int i = 0; i < ridersThisCycle; i++) {
+            Visitor rider = waitingLine.poll();
+            addVisitorToHistory(rider);
+            System.out.println("Visitor " + rider.getVisitorId() + " has boarded the ride");
+        }
+
+        // Increment operation cycle count
+        numOfCycles++;
+        System.out.println(rideName + " completed its " + numOfCycles + "th operation cycle");
     }
 }

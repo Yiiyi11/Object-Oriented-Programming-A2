@@ -102,7 +102,33 @@ public class AssignmentTwo {
         System.out.println("\n排序后（年龄升序，同年龄有快速通行证在前）：");
         ferrisWheel.printRideHistory();
     }
-    public void partFive() {}
+    public void partFive() {
+        System.out.println("\n=== Part 5: 运行Ride周期测试 ===");
+        // 1. Create an operator
+        Employee operator = new Employee("赵六", 33, "13800138003", "EMP004", "过山车操作员");
+
+        // 2. Create a Ride object（maxRider=2）
+        Ride rollerCoaster = new Ride("极速过山车", "Roller Coaster", operator, 2);
+
+        // 3. Add 10 visitors to the queue
+        for (int i = 1; i <= 10; i++) {
+            Visitor v = new Visitor("Visitor" + i, 18 + i, "13900139" + (100 + i), "VIS" + (100 + i), i % 3 == 0);
+            rollerCoaster.addVisitorToQueue(v);
+        }
+
+        // 4. Print queue before running
+        System.out.println("\n运行前队列：");
+        rollerCoaster.printQueue();
+
+        // 5. Run a cycle
+        rollerCoaster.runOneCycle();
+
+        // 6. Print the queue and history after running
+        System.out.println("\n运行后队列：");
+        rollerCoaster.printQueue();
+        System.out.println("\n运行后乘坐历史：");
+        rollerCoaster.printRideHistory();
+    }
     public void partSix() {}
     public void partSeven() {}
 }
