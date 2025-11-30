@@ -1,35 +1,39 @@
 import java.util.Queue;
 import java.util.LinkedList;
 import java.util.Iterator;
+import java.util.Collections;
+// Add IO imports for CSV export (critical)
+import java.io.BufferedWriter;
+import java.io.FileWriter;
+import java.io.IOException;
 
 public class Ride implements RideInterface {
-    // Instance variables (Name, Type, Maximum Riders, Operator)
+    // Instance variables (unchanged)
     private String rideName;
-    private String rideType; // e.g., "Roller Coaster", "Water Ride"
-    private Employee operator; // Must be of Employee type to identify the assigned operator
+    private String rideType;
+    private Employee operator;
     private int maxRider;
     private int numOfCycles;
 
-    private Queue<Visitor> waitingLine; // Waiting queue (FIFO)
-    private LinkedList<Visitor> rideHistory; // Ride history records
+    private Queue<Visitor> waitingLine;
+    private LinkedList<Visitor> rideHistory;
 
-    // Default constructor
+    // Constructors (unchanged)
     public Ride() {
-        this.waitingLine = new LinkedList<>(); // Initialize waiting queue
-        this.rideHistory = new LinkedList<>(); // Initialize ride history
-        this.numOfCycles = 0; // Default number of operation cycles is 0
+        this.waitingLine = new LinkedList<>();
+        this.rideHistory = new LinkedList<>();
+        this.numOfCycles = 0;
     }
 
-    // Parameterized constructor
     public Ride(String rideName, String rideType, Employee operator, int maxRider) {
-        this(); // Call default constructor to initialize collections
+        this();
         this.rideName = rideName;
         this.rideType = rideType;
         this.operator = operator;
         this.maxRider = maxRider;
     }
 
-    // Getters and Setters
+    // Getters & Setters (unchanged)
     public String getRideName() { return rideName; }
     public void setRideName(String rideName) { this.rideName = rideName; }
     public String getRideType() { return rideType; }
@@ -41,7 +45,7 @@ public class Ride implements RideInterface {
     public int getNumOfCycles() { return numOfCycles; }
     public void setNumOfCycles(int numOfCycles) { this.numOfCycles = numOfCycles; }
 
-    // Override toString method
+    // toString() (unchanged)
     @Override
     public String toString() {
         return "Ride{" +
@@ -54,12 +58,12 @@ public class Ride implements RideInterface {
     }
 
     // ------------------------------
-    // Queue-related method implementations (Part 3)
+    // Part 3: Queue-related methods (unchanged)
     // ------------------------------
     @Override
     public void addVisitorToQueue(Visitor visitor) {
         if (visitor != null) {
-            waitingLine.offer(visitor); // Use Queue's offer method to add elements (FIFO)
+            waitingLine.offer(visitor);
             System.out.println("Successfully added visitor " + visitor.getVisitorId() + " to " + rideName + " waiting queue");
         } else {
             System.out.println("Error: Visitor object is null, cannot add to queue");
@@ -72,7 +76,7 @@ public class Ride implements RideInterface {
             System.out.println("Error: " + rideName + " waiting queue is empty, cannot remove visitor");
             return;
         }
-        Visitor removed = waitingLine.poll(); // Remove the head element of the queue
+        Visitor removed = waitingLine.poll();
         System.out.println("Successfully removed visitor from " + rideName + " queue: " + removed.getVisitorId());
     }
 
@@ -91,7 +95,7 @@ public class Ride implements RideInterface {
     }
 
     // ------------------------------
-    // Ride history-related method implementations (Part 4A)
+    // Part 4A: Ride history-related methods (unchanged)
     // ------------------------------
     @Override
     public void addVisitorToHistory(Visitor visitor) {
@@ -109,11 +113,10 @@ public class Ride implements RideInterface {
             System.out.println("Error: Visitor object is null, cannot perform check");
             return false;
         }
-        // Use Iterator to traverse (REQUIRED - no marks if not used)
         Iterator<Visitor> iterator = rideHistory.iterator();
         while (iterator.hasNext()) {
             Visitor v = iterator.next();
-            if (v.getVisitorId().equals(visitor.getVisitorId())) { // Check by visitor ID
+            if (v.getVisitorId().equals(visitor.getVisitorId())) {
                 return true;
             }
         }
@@ -122,7 +125,7 @@ public class Ride implements RideInterface {
 
     @Override
     public int numberOfVisitors() {
-        return rideHistory.size(); // Return total number of visitors in history
+        return rideHistory.size();
     }
 
     @Override
@@ -139,45 +142,87 @@ public class Ride implements RideInterface {
             index++;
         }
     }
+
     // ------------------------------
-    // Part 4B: Sort ride history using VisitorComparator
+    // Part 4B: Sort ride history (unchanged)
     // ------------------------------
     public void sortRideHistory() {
         if (rideHistory.isEmpty()) {
             System.out.println(rideName + " ride history is empty - no need to sort");
             return;
         }
-        // Use VisitorComparator to sort the LinkedList (age ascending → fast pass descending)
         Collections.sort(rideHistory, new VisitorComparator());
         System.out.println(rideName + " ride history sorted successfully");
     }
+
+    // ------------------------------
+    // Part 5: Run one cycle (unchanged)
+    // ------------------------------
     @Override
     public void runOneCycle() {
         System.out.println("\n=== Starting one operation cycle for " + rideName + " ===");
-        // Check condition 1: Whether an operator is assigned
         if (operator == null) {
             System.out.println("Error: No operator assigned to " + rideName + ", cannot start operation");
             return;
         }
-        // Check condition 2: Whether the waiting queue is empty
         if (waitingLine.isEmpty()) {
             System.out.println("Error: " + rideName + " waiting queue is empty, cannot start operation");
             return;
         }
 
-        // Calculate number of riders for this cycle (based on max capacity and queue size)
         int ridersThisCycle = Math.min(maxRider, waitingLine.size());
         System.out.println("Number of riders for this cycle: " + ridersThisCycle);
 
-        // Remove visitors from queue, add to ride history
         for (int i = 0; i < ridersThisCycle; i++) {
             Visitor rider = waitingLine.poll();
             addVisitorToHistory(rider);
             System.out.println("Visitor " + rider.getVisitorId() + " has boarded the ride");
         }
 
-        // Increment operation cycle count
         numOfCycles++;
-        System.out.println(rideName + " completed its " + numOfCycles + "th operation cycle");
+        String ordinalSuffix = getOrdinalSuffix(numOfCycles);
+        System.out.println(rideName + " completed its " + numOfCycles + ordinalSuffix + " operation cycle");
+    }
+
+    // Helper method for ordinal suffix (optional, for Part 5)
+    private String getOrdinalSuffix(int number) {
+        if (number % 100 >= 11 && number % 100 <= 13) {
+            return "th";
+        }
+        return switch (number % 10) {
+            case 1 -> "st";
+            case 2 -> "nd";
+            case 3 -> "rd";
+            default -> "th";
+        };
+    }
+
+    // ------------------------------
+    // Extended Feature: Export ride history to CSV (ADD HERE)
+    // ------------------------------
+    /**
+     * Exports ride history records to a CSV file with error handling
+     * @param filePath Path to the output CSV file (e.g., "carousel_history.csv")
+     */
+    public void exportRideHistory(String filePath) {
+        System.out.println("\n=== Exporting " + rideName + " ride history to file ===");
+        // Try-with-resources: Auto-close BufferedWriter to avoid resource leaks
+        try (BufferedWriter writer = new BufferedWriter(new FileWriter(filePath))) {
+            // Write ride history in CSV format: VisitorID,Name,Age,ContactNumber,HasFastPass
+            for (Visitor visitor : rideHistory) {
+                String line = String.join(",",
+                        visitor.getVisitorId(),
+                        visitor.getName(),
+                        String.valueOf(visitor.getAge()),
+                        visitor.getContactNumber(),
+                        String.valueOf(visitor.isHasFastPass())
+                );
+                writer.write(line);
+                writer.newLine(); // New line for next record
+            }
+            System.out.println("Successfully exported " + rideHistory.size() + " records to " + filePath);
+        } catch (IOException e) {
+            System.out.println("Error: Failed to export file - " + e.getMessage());
+        }
     }
 }

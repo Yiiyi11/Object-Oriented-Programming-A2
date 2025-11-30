@@ -129,6 +129,19 @@ public class AssignmentTwo {
         System.out.println("\n运行后乘坐历史：");
         rollerCoaster.printRideHistory();
     }
-    public void partSix() {}
+    public void partSix() {
+        System.out.println("\n=== Part 6: 导出乘坐历史到文件 ===");
+        // 1. Create a Ride object and add 5 visitors to the history
+        Ride logFlume = new Ride("激流勇进", "Water Ride", new Employee("孙七", 29, "13800138004", "EMP005", "水上项目操作员"), 3);
+        logFlume.addVisitorToHistory(new Visitor("Frank", 27, "13900139021", "VIS021", true));
+        logFlume.addVisitorToHistory(new Visitor("Grace", 23, "13900139022", "VIS022", false));
+        logFlume.addVisitorToHistory(new Visitor("Henry", 31, "13900139023", "VIS023", true));
+        logFlume.addVisitorToHistory(new Visitor("Ivy", 25, "13900139024", "VIS024", false));
+        logFlume.addVisitorToHistory(new Visitor("Jack", 28, "13900139025", "VIS025", true));
+
+        // 2. Export to CSV file (path can be customized, like rideHistory.csv in the project root)
+        String filePath = "rideHistory.csv";
+        logFlume.exportRideHistory(filePath);
+    }
     public void partSeven() {}
 }
