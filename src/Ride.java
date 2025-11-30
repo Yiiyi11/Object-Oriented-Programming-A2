@@ -2,30 +2,33 @@ import java.util.Queue;
 import java.util.LinkedList;
 
 public class Ride implements RideInterface {
-    // 实例变量（名称、类型、最大载客量、操作员）
+    // Instance variables (Name, Type, Maximum Riders, Operator)
     private String rideName;
-    private String rideType; // 如"Roller Coaster"、"Water Ride"
-    private Employee operator; // 必须为Employee类型，标识是否有操作员
+    private String rideType; // e.g., "Roller Coaster", "Water Ride"
+    private Employee operator; // Must be of Employee type to identify if there is an operator
     private int maxRider;
     private int numOfCycles;
 
-    private Queue<Visitor> waitingLine; // 等待队列
-    private LinkedList<Visitor> rideHistory; // 乘坐历史
+    private Queue<Visitor> waitingLine; // Waiting queue
+    private LinkedList<Visitor> rideHistory; // Ride history records
 
+    // Default constructor
     public Ride() {
-        this.waitingLine = new LinkedList<>(); // 初始化队列
-        this.rideHistory = new LinkedList<>(); // 初始化历史记录
-        this.numOfCycles = 0; // 默认运行次数为0
+        this.waitingLine = new LinkedList<>(); // Initialize queue
+        this.rideHistory = new LinkedList<>(); // Initialize ride history
+        this.numOfCycles = 0; // Default number of cycles is 0
     }
 
+    // Parameterized constructor
     public Ride(String rideName, String rideType, Employee operator, int maxRider) {
-        this(); // 调用默认构造器初始化集合
+        this(); // Call default constructor to initialize collections
         this.rideName = rideName;
         this.rideType = rideType;
         this.operator = operator;
         this.maxRider = maxRider;
     }
 
+    // Getters and Setters
     public String getRideName() { return rideName; }
     public void setRideName(String rideName) { this.rideName = rideName; }
     public String getRideType() { return rideType; }
@@ -37,6 +40,7 @@ public class Ride implements RideInterface {
     public int getNumOfCycles() { return numOfCycles; }
     public void setNumOfCycles(int numOfCycles) { this.numOfCycles = numOfCycles; }
 
+    // Override toString method
     @Override
     public String toString() {
         return "Ride{" +
@@ -50,43 +54,62 @@ public class Ride implements RideInterface {
 
     @Override
     public void addVisitorToQueue(Visitor visitor) {
-        // Part3补充：添加访客到等待队列
+        if (visitor != null) {
+            waitingLine.offer(visitor); // Use Queue's offer method to add elements (FIFO)
+            System.out.println("Successfully added visitor " + visitor.getVisitorId() + " to " + rideName + " waiting queue");
+        } else {
+            System.out.println("Error: Visitor object is null, cannot add to queue");
+        }
     }
 
     @Override
     public void removeVisitorFromQueue() {
-        // Part3补充：从队列移除访客
+        if (waitingLine.isEmpty()) {
+            System.out.println("Error: " + rideName + " waiting queue is empty, cannot remove visitor");
+            return;
+        }
+        Visitor removed = waitingLine.poll(); // Remove the head element of the queue
+        System.out.println("Successfully removed visitor from " + rideName + " queue: " + removed.getVisitorId());
     }
 
     @Override
     public void printQueue() {
-        // Part3补充：打印等待队列
+        if (waitingLine.isEmpty()) {
+            System.out.println(rideName + " waiting queue is empty");
+            return;
+        }
+        System.out.println("\n" + rideName + " Waiting Queue (Total: " + waitingLine.size() + " people):");
+        int index = 1;
+        for (Visitor visitor : waitingLine) {
+            System.out.println(index + ". " + visitor);
+            index++;
+        }
     }
 
     @Override
     public void addVisitorToHistory(Visitor visitor) {
-        // Part4补充：添加访客到乘坐历史
+        // Part4: Add visitor to ride history
     }
 
     @Override
     public boolean checkVisitorFromHistory(Visitor visitor) {
-        // Part4补充：检查访客是否在历史中
+        // Part4: Check if visitor exists in ride history
         return false;
     }
 
     @Override
     public int numberOfVisitors() {
-        // Part4补充：返回历史记录中的访客数
+        // Part4: Return number of visitors in history
         return 0;
     }
 
     @Override
     public void printRideHistory() {
-        // Part4补充：打印乘坐历史
+        // Part4: Print ride history
     }
 
     @Override
     public void runOneCycle() {
-        // Part5补充：运行一次游乐设施周期
+        // Part5: Run one cycle of the ride
     }
 }
